@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+//using Unity.Mathematics;
 
 public class Dungeon : MonoBehaviour
 {
@@ -99,7 +100,6 @@ public class Dungeon : MonoBehaviour
 
     private Vector2Int Dig(int x, int y)
     {
-        Vector2Int tmpGoalPos;
         // 指定座標から掘れなくなるまで堀り続ける
         while (true)
         {
@@ -145,17 +145,13 @@ public class Dungeon : MonoBehaviour
 
         // どこにも掘り進められない場合、穴掘り開始候補座標から掘りなおし
         // 候補座標が存在しないとき、穴掘り完了
+
         Vector2Int Pos = GetReStartPos();
         if (Pos != new Vector2Int(-1, -1))
         {
-            tmpGoalPos = Dig(Pos.x, Pos.y);
+            Dig(Pos.x, Pos.y);
         }
-        else
-        {
-            tmpGoalPos = new Vector2Int(x, y);
-        }
-
-        return tmpGoalPos;
+        return  new Vector2Int(x, y);
     }
     //パラメータに応じてオブジェクトを生成する
     private void BuildDungeon()
@@ -168,7 +164,7 @@ public class Dungeon : MonoBehaviour
                 //範囲外、または壁の場合に壁オブジェクトを生成する
                 if (this.Maze[i, j] == Materials.Wall)
                 {
-                    for (int k = 0; k < 5; k++)
+                    for (int k = 0; k < 1; k++)
                     {
                         GameObject wallObj = Instantiate(wall, new Vector3(i, k, j), Quaternion.identity) as GameObject;
                         wallObj.transform.parent = transform;
@@ -204,6 +200,20 @@ public class Dungeon : MonoBehaviour
 
         return Pos;
     }
+
+   /* private double nomal(){
+
+        double rnd = Random.Range(0,1); 
+        double X,Y; 
+        double Z1; 
+
+        X = rnd.NextDouble();
+        Y = rnd.NextDouble(); 
+        Z1 = Math.Sqrt(-2.0 * Math.Log(X)) * Math.Cos(2.0 * Math.PI * Y); 
+
+        return Z1;
+
+    }*/
 
     private enum Materials
     {
